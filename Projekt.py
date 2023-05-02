@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from scipy.interpolate import interp2d
+from scipy.interpolate import interp1d
 
 ma = np.loadtxt('136700.DAT')
 n = ma.shape[0]
@@ -52,7 +52,13 @@ class Projekt:
         return mean_y, median_y, std_y
 
     def interpolate_y(self,x,y,z):
-        f = interp2d(x,z[np.where(y==1.5)][0],kind='cubic')
+        new_x=np.zeros(21)
+        n=new_x.shape[0]
+        new_y=np.zeros(21)
+        for i in range(n):
+            new_x[i]=x[i]
+            new_y[i]=0.5
+        f = interp1d(new_x,new_y,kind='cubic')
         values=f(x)
         return  values
 
@@ -60,9 +66,8 @@ class Projekt:
 
 projekt = Projekt()
 x, y, z = projekt.wyznacz_xyz(ma, n)
-# projekt.wykres2D(x, y, z)
-# projekt.Wykres3D(x, y, z)
-# print(projekt.sredniamedianaodchylenie(x,y,z))
+projekt.wykres2D(x, y, z)
+projekt.Wykres3D(x, y, z)
+print(projekt.sredniamedianaodchylenie(x,y,z))
 
-ra=np.linalg.solve(x,z)
-print(ra)
+# print(projekt.interpolate_y(x,y,z))
