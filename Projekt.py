@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from scipy.interpolate import interp1d
+from scipy.interpolate import interp2d
 
 ma = np.loadtxt('136700.DAT')
 n = ma.shape[0]
@@ -41,8 +41,6 @@ class Projekt:
 
     def sredniamedianaodchylenie(self, x, y, z):
         unique_y = np.unique(y)
-
-        # Wyznaczenie średniej, mediany i odchylenia standardowego dla każdej wartości y
         mean_y = []
         median_y = []
         std_y = []
@@ -53,23 +51,18 @@ class Projekt:
             std_y.append(np.std(z[indices]))
         return mean_y, median_y, std_y
 
-    def interpolate_y(self,grid, y_coord, new_x):
-        # Wybór współrzędnej y
-        y_data = grid[:, y_coord]
-        # Wyznaczenie nowych wartości osi x
-        old_x = np.arange(len(y_data))
-        # Interpolacja liniowa
-        f = interp1d(old_x, y_data, kind='linear')
-        # Wartości dla nowych osi x
-        new_y = f(new_x)
-        return new_y
+    def interpolate_y(self,x,y,z):
+        f = interp2d(x,z[np.where(y==1.5)][0],kind='cubic')
+        values=f(x)
+        return  values
+
 
 
 projekt = Projekt()
 x, y, z = projekt.wyznacz_xyz(ma, n)
 # projekt.wykres2D(x, y, z)
 # projekt.Wykres3D(x, y, z)
+# print(projekt.sredniamedianaodchylenie(x,y,z))
 
-xx,yy =np.meshgrid(x, y)
-
-projekt.interpolate_y(yy,1,x)
+ra=np.linalg.solve(x,z)
+print(ra)
