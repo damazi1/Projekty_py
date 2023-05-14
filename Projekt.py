@@ -57,6 +57,12 @@ class Projekt:
             std_y.append(np.std(z[indices]))
         return mean_y, median_y, std_y
     
+    def srednia (self,x,y,z):
+        unique_y = np.unique(y)
+        total=0
+            
+    
+    
     def interpolacja_l(self,ma,z):
         x=np.linspace(0,2,10)
 
@@ -85,20 +91,21 @@ x, y, z = projekt.wyznacz_xyz(ma, n)
 # print(projekt.sredniamedianaodchylenie(x,y,z))
 # print ("Interpolacja lagrandża")
 # projekt.interpolacja_l(ma,z)
-
+projekt.srednia(x,y,z)
 
 x1=np.zeros(21)
 y1=np.zeros(21)
 for i in range (21,42,1):
     x1[i-21]=x[i]
     y1[i-21]=z[i]
-
-plt.scatter(x1,y1)
-plt.show()
 y_f = interp1d(x1, y1, 'linear')
-print(y_f(1.55))
+x = np.linspace(0,2,1000)
+y = y_f(x)
+plt.scatter(x,y)
+plt.show()
+print(y_f(1.58))
 y_f1 = interp1d(x1, y1, 'cubic')
-print(y_f1(1.55))
+print(y_f1(1.58))
 x = np.linspace(0,2,1000)
 y = y_f1(x)
 plt.scatter(x,y)
