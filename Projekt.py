@@ -7,7 +7,7 @@ from scipy.interpolate import interp2d
 from scipy.integrate import quad
 from scipy.integrate import solve_ivp
 
-ma = np.loadtxt('136700.DAT')
+ma = np.loadtxt('136700.dat')
 n = ma.shape[0]
 
 
@@ -57,11 +57,27 @@ class Projekt:
             std_y.append(np.std(z[indices]))
         return mean_y, median_y, std_y
     
-    def srednia (self,x,y,z):
+    def srednia (self,y,z):
         unique_y = np.unique(y)
-        total=0
-            
-    
+        i=0
+        for y_val in unique_y:
+            indices=np.where(y==y_val)
+            print(unique_y[i],' ',np.mean(z[indices]))
+            i+=1
+    def mediana(self,y,z):
+        unique_y = np.unique(y)
+        i=0
+        for y_val in unique_y:
+            indices=np.where(y==y_val)
+            print(unique_y[i],' ',np.median(z[indices]))
+            i+=1
+    def odchylenie(self,y,z):
+        unique_y = np.unique(y)
+        i=0
+        for y_val in unique_y:
+            indices=np.where(y==y_val)
+            print(unique_y[i],' ',np.std(z[indices]))
+            i+=1
     
     def interpolacja_l(self,ma,z):
         x=np.linspace(0,2,10)
@@ -91,8 +107,9 @@ x, y, z = projekt.wyznacz_xyz(ma, n)
 # print(projekt.sredniamedianaodchylenie(x,y,z))
 # print ("Interpolacja lagrandża")
 # projekt.interpolacja_l(ma,z)
-projekt.srednia(x,y,z)
-
+projekt.srednia(y,z)
+projekt.mediana(y,z)
+projekt.odchylenie(y,z)
 x1=np.zeros(21)
 y1=np.zeros(21)
 for i in range (21,42,1):
