@@ -38,7 +38,7 @@ class Projekt:
         ax = fig.add_subplot(111, projection='3d')
         surf = ax.plot_trisurf(x, y, z, cmap='viridis', edgecolor='none')
         plt.title('Mapa 3D', fontdict={
-                  'fontname': 'monospace', 'fontsize': 18})
+                  'fontname': 'monospace', 'fontsize': 18})#aspect
         fig.colorbar(surf, shrink=0.5, aspect=5)
         ax.set_xlabel('X Label')
         ax.set_ylabel('Y Label')
@@ -102,11 +102,11 @@ class Projekt:
 
 projekt = Projekt()
 x, y, z = projekt.wyznacz_xyz(ma, n)
-# projekt.wykres2D(x, y, z)
-# projekt.Wykres3D(x, y, z)
-# print(projekt.sredniamedianaodchylenie(x,y,z))
-# print ("Interpolacja lagrandża")
-# projekt.interpolacja_l(ma,z)
+projekt.wykres2D(x, y, z)
+projekt.Wykres3D(x, y, z)
+print(projekt.sredniamedianaodchylenie(x,y,z))
+print ("Interpolacja lagrandża")
+projekt.interpolacja_l(ma,z)
 projekt.srednia(y,z)
 projekt.mediana(y,z)
 projekt.odchylenie(y,z)
