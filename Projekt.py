@@ -6,6 +6,7 @@ from scipy.interpolate import interp1d
 from scipy.interpolate import interp2d
 from scipy.integrate import quad
 from scipy.integrate import solve_ivp
+import sympy as sp
 
 ma = np.loadtxt('136700.dat')
 n = ma.shape[0]
@@ -24,26 +25,30 @@ class Projekt:
         return x, y, z
 
     def wykres2D(self, x, y, z):
-        colors = z
-        fig, ax = plt.subplots()
-        scatter = ax.scatter(x, y, c=colors, cmap='coolwarm')
-        plt.title('Mapa 2D', fontdict={
-                  'fontname': 'monospace', 'fontsize': 18})
-        plt.legend(*scatter.legend_elements(), title="Wysokość")
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        surf = ax.plot_trisurf(x, y, z, cmap='plasma', edgecolor='none')
+        plt.title('Mapa 3D', fontdict={'fontname': 'monospace', 'fontsize': 18})
+        fig.colorbar(surf, shrink=0.5,aspect=5)
+        ax.set_box_aspect([2,1,0.0001])
+        ax.set_xlabel('X Label')
+        ax.set_ylabel('Y Label')
+        ax.set_zlabel('Z Label')
         plt.show()
 
     def Wykres3D(self, x, y, z):
 
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        surf = ax.plot_trisurf(x, y, z, cmap='viridis', edgecolor='none')
-        plt.title('Mapa 3D', fontdict={
-                  'fontname': 'monospace', 'fontsize': 18})#aspect
-        fig.colorbar(surf, shrink=0.5, aspect=5)
+        surf = ax.plot_trisurf(x, y, z, cmap='plasma', edgecolor='none')
+        plt.title('Mapa 3D', fontdict={'fontname': 'monospace', 'fontsize': 18})
+        fig.colorbar(surf, shrink=0.5,aspect=5)
+        ax.set_box_aspect([2,1,1])
         ax.set_xlabel('X Label')
         ax.set_ylabel('Y Label')
         ax.set_zlabel('Z Label')
         plt.show()
+
 
     def sredniamedianaodchylenie(self, x, y, z):
         unique_y = np.unique(y)
@@ -79,57 +84,185 @@ class Projekt:
             print(unique_y[i],' ',np.std(z[indices]))
             i+=1
     
-    def interpolacja_l(self,ma,z):
-        x=np.linspace(0,2,10)
+    def mianownik(self,x,k,n):
+        m=1
+        for j in range(n):
+            if j!=k:
+                m*=(x[k]-x[j])
+        return m
+    
+    def mianownik1(self,x,x1,k,n):
+        m=1
+        for i in range(n):
+            if i!=k:
+                m*=x1-x[i]
+        return m
 
-        x_interp = np.linspace(0, 2, 21) 
-        y_interp = np.zeros_like(x_interp)
+    def interpolacja_l1(self,ma,iks):
+        n=21
+        x=np.zeros(n)
+        y=np.zeros(n)
+        W=0
+        for i in range(n):
+            x[i]=ma[i+n,0]
+            y[i]=ma[i+n,2]
+        for i in range (n):
+            W+=y[i]*(projekt.mianownik1(x,iks,i,n)/projekt.mianownik(x,i,n))
+        return W
 
-        # Przeprowadzanie interpolacji dla każdej wartości x_interp
-        for i in range(len(x_interp)):
-            for j in range(len(x)):
-                L = 1
-                for k in range(len(x)):
-                    if k != j:
-                        L *= (x_interp[i] - x[k]) / (x[j] - x[k])
-                y_interp[i] += z[j+21] * L
+    def interpolacja_l(self,ma,iks):
+        n=21
+        x=np.zeros(n)
+        y=np.zeros(n)
+        a=np.zeros(n)
+        for i in range(n):
+            x[i]=ma[i+n,0]
+            y[i]=ma[i+n,1]
+        for i in range(n):
+            a[i]=y[i]/projekt.mianownik(x,i,n)
+        x1=iks
+        W=0
+        for i in range(n):
+            W+=a[i]*projekt.mianownik1(x,x1,i,n)
+        return W
+    
+    def aproksymacja(self,ma):
+        n=21
+        M1=np.zeros((3,3))
+        M2=np.zeros(3)
+        x=np.zeros(n)
+        y=np.zeros(n)
+        z=np.zeros(n)
+        for i in range(21):
+            x[i]=ma[i+21,0]
+            y[i]=ma[i+21,1]
+            z[i]=ma[i+21,2]
+        M1[0][0]=n
+        for i in range(n):
+            M1[0][1]+=x[i]
+            M1[0][2]+=y[i]
+            M1[1][0]+=x[i]
+            M1[1][1]+=x[i]*x[i]
+            M1[1][2]+=x[i]*y[i]
+            M1[2][0]+=y[i]
+            M1[2][1]+=x[i]*y[i]   
+            M1[2][2]+=y[i]*y[i]
+            M2[0]+=z[i]
+            M2[1]+=x[i]*z[i]
+            M2[2]+=y[i]*z[i]
+        K=np.linalg.solve(M1,M2)
+        print(K)
 
-        # Wyświetlanie wyników
-        for i in range(len(x_interp)):
-            print(f'x={x_interp[i]:.2f}, y={y_interp[i]:.2f}')
+    def fun(x,y,z,a0,a1,a2):
+        return 0
+    def aproksymacja1(self,ma):
+                
+        M1=np.zeros((3,3))
+        P1=np.zeros (3)
+        x=np.zeros(n)
+        y=np.zeros(n)
+        z=np.zeros(n)
+        for i in range(21):
+            x[i]=ma[i+21,0]
+            y[i]=ma[i+21,1]
+            z[i]=ma[i+21,2]
+        M1[0,0]=n
+        for i in range (n):
+            M1[0,1]=M1[0,1]+x[i]
+            M1[0,2]=M1[0,2]+x[i]**2
+            M1[1,0]=M1[1,0]+x[i]
+            M1[1,1]=M1[1,1]+x[i]**2
+            M1[1,2]=M1[1,2]+x[i]**3
+            M1[2,0]=M1[2,0]+x[i]**2
+            M1[2,1]=M1[2,1]+x[i]**3
+            M1[2,2]=M1[2,2]+x[i]**4
 
+        for i in range (n):
+            P1[0]+=z[i]
+            P1[1]+=x[i]*z[i]
+            P1[2]+=(x[i]**2)*z[i]
 
+        print (M1)
+        print (P1)
+
+        K1=np.linalg.solve(M1,P1)
+
+        print (K1)
+        return K1
+
+    def fun1(self,a0,a1,a2,x):
+        return a0+a1*x+a2*x**2
+
+    def calkSa(self,K1):
+        cp=0
+        xs=0
+        ys=0
+        a=0
+        b=2
+        n=20
+        x=np.zeros(n+1)
+        y=np.zeros(n+1)
+        h=(b-a)/n
+        for i in range(n+1):
+            x[i]=a+i*h
+            y[i]=(projekt.fun1(K1[0],K1[1],K1[2],x[i]))
+        for i in range (n):
+            xs=(x[i]+x[i+1])/2
+            ys=(projekt.fun1(K1[0],K1[1],K1[2],xs))
+            cp+=h*((y[i]+y[i+1]+4*ys)/6)
+        return cp
 
 projekt = Projekt()
 x, y, z = projekt.wyznacz_xyz(ma, n)
 projekt.wykres2D(x, y, z)
 projekt.Wykres3D(x, y, z)
-print(projekt.sredniamedianaodchylenie(x,y,z))
-print ("Interpolacja lagrandża")
-projekt.interpolacja_l(ma,z)
-projekt.srednia(y,z)
-projekt.mediana(y,z)
-projekt.odchylenie(y,z)
+# print(projekt.sredniamedianaodchylenie(x,y,z))
+# print ("Interpolacja lagrandża")
+# projekt.interpolacja_l(ma,z)
+# projekt.srednia(y,z)
+# projekt.mediana(y,z)
+# projekt.odchylenie(y,z)
+a=0
+b=2
+K1=projekt.aproksymacja1(ma)
+X=sp.symbols('x')
+
+cd = sp.integrate(projekt.fun1(K1[0],K1[1],K1[2],X),(X,a,b))
+sa=projekt.calkSa(K1)
+print ("Całka: ",cd," Całka SA: ",sa)
+
+
+
 x1=np.zeros(21)
 y1=np.zeros(21)
+z1=np.zeros(21)
 for i in range (21,42,1):
     x1[i-21]=x[i]
     y1[i-21]=z[i]
-y_f = interp1d(x1, y1, 'linear')
-x = np.linspace(0,2,1000)
-y = y_f(x)
-plt.scatter(x,y)
+    z1[i-21]=z[i]
+iks=np.linspace(0,2,100)
+plt.plot(projekt.interpolacja_l1(ma,iks))
 plt.show()
-print("interpolacja liniowa: ",y_f(1.58))
-y_f1 = interp1d(x1, y1, 'cubic')
-print("interpolacja sześcienna: ",y_f1(1.58))
-h1=y_f(1.58)
-h2=y_f1(1.58)
-wynik=h1-h2
-print("roznica wynikow: ",wynik)
-x = np.linspace(0,2,1000)
-y = y_f1(x)
-plt.scatter(x,y)
+
+plt.plot(iks,projekt.fun1(K1[0],K1[1],K1[2],iks),'b-',label='Wykres aproksymacji kwadratowej')
+plt.legend()
 plt.show()
+
+# y_f = interp1d(x1, y1, 'linear')
+# x = np.linspace(0,2,1000)
+# y = y_f(x)
+# plt.scatter(x,y)
+# plt.show()
+# print("interpolacja liniowa: ",y_f(1.58))
+# y_f1 = interp1d(x1, y1, 'cubic')
+# print("interpolacja sześcienna: ",y_f1(1.58))
+# h1=y_f(1.58)
+# h2=y_f1(1.58)
+# wynik=h1-h2
+# print("roznica wynikow: ",wynik)
+# x = np.linspace(0,2,1000)
+# y = y_f1(x)
+# plt.scatter(x,y)
+# plt.show()
 
 
