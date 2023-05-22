@@ -255,12 +255,6 @@ a=0
 b=2
 K1=projekt.aproksymacja1(ma)
 X=sp.symbols('x')
-iks=np.linspace(0,2,21)
-w=np.zeros(len(iks))
-for i in range(len(iks)):
-    w[i]=projekt.interpolacja_l1(ma,iks[i])
-plt.plot(iks,w,'-b')
-plt.show()
 jd=projekt.interpolacja_l1(ma,0.2)
 print("funkcja w punkcie 0.2",jd)
 # cd1 = sp.integrate(projekt.interpolacja_l1(ma,X),(X,a,b))
@@ -268,7 +262,7 @@ print("funkcja w punkcie 0.2",jd)
 # sa=projekt.calkSa(K1)
 # print ("Całka: ",cd," Całka SA: ",cd1)
 
-projekt.interl(ma)
+# projekt.interl(ma)
 
 x1=np.zeros(21)
 y1=np.zeros(21)
@@ -277,6 +271,13 @@ for i in range (21,42,1):
     x1[i-21]=x[i]
     y1[i-21]=z[i]
     z1[i-21]=z[i]
+iks=np.arange(0.2,1.81,0.01)
+w=np.zeros(len(iks))
+for i in range(len(iks)):
+    w[i]=projekt.interpolacja_l1(ma,iks[i])
+plt.plot(x1,z1,'bo')
+plt.plot(iks,w,'-b')
+plt.show()
 iks=np.linspace(0,2,100)
 
 plt.plot(iks,projekt.fun1(K1[0],K1[1],K1[2],iks),'b-',label='Wykres aproksymacji kwadratowej')

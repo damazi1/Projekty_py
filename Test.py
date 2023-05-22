@@ -1,25 +1,41 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
-# Dane do interpolacji
-x = [1, 2, 3, 4, 5]
-y = [2, 4, 6, 8, 10]
+ma = np.loadtxt('136700.dat')
+n = ma.shape[0]
 
-# Stopień wielomianu
-N = 3
+def divided_diff(x, y):
+    n = len(y)
+    coef = np.zeros([n, n])
+    # the first column is y
+    coef[:,0] = y
+    
+    for j in range(1,n):
+        for i in range(n-j):
+            coef[i][j] = \
+           (coef[i+1][j-1] - coef[i][j-1]) / (x[i+j]-x[i])
+            
+    return coef
 
-# Dopasowanie wielomianu stopnia N do danych
-coefficients = np.polyfit(x, y, N)
+def newton_poly(coef, x_data, x):
+    n = len(x_data) - 1 
+    p = coef[n]
+    for k in range(1,n+1):
+        p = coef[n-k] + (x -x_data[n-k])*p
+    return p
+x=np.zeros(21)
+y=np.zeros(21)
+for i in range(21):
+    x[i]=ma[i+21,0]
+    y[i]=ma[i+21,2]
+# get the divided difference coef
+a_s = divided_diff(x, y)[0, :]
 
-# Utworzenie wielomianu na podstawie uzyskanych współczynników
-poly = np.poly1d(coefficients)
+# evaluate on new data points
+x_new = np.arange(0.3,1.71,0.01)
+y_new = newton_poly(a_s, x, x_new)
 
-# Wygenerowanie wartości dla nowych punktów
-new_x = np.linspace(min(x), max(x), 100)
-new_y = poly(new_x)
-
-# Wyświetlenie wyników
-print("Współczynniki wielomianu:")
-print(coefficients)
-print("\nWartości dla nowych punktów:")
-for i in range(len(new_x)):
-    print("x =", new_x[i], "  y =", new_y[i])
+plt.figure(figsize = (12, 8))
+plt.plot(x, y, 'bo')
+plt.plot(x_new, y_new)
+plt.show()
