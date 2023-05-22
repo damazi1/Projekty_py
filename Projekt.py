@@ -84,12 +84,12 @@ class Projekt:
             print(unique_y[i],' ',np.std(z[indices]))
             i+=1
     
-    def mianownik(self,x,k,n):
+    def mianownik(self,x,k,n,z):
         m=1
         for j in range(n):
             if j!=k:
                 m*=(x[k]-x[j])
-        return m
+        return z[k]/m
     
     def mianownik1(self,x,x1,k,n):
         m=1
@@ -98,17 +98,31 @@ class Projekt:
                 m*=x1-x[i]
         return m
 
-    def interpolacja_l1(self,ma,iks):
-        n=21
+    def interpolacja_l1(self,ma,xp):
+        n=21    
         x=np.zeros(n)
         y=np.zeros(n)
-        W=0
+        a=np.zeros(n)
+        yp=0
         for i in range(n):
             x[i]=ma[i+n,0]
             y[i]=ma[i+n,2]
-        for i in range (n):
-            W+=y[i]*(projekt.mianownik1(x,iks,i,n)/projekt.mianownik(x,i,n))
-        return W
+        for i in range(n):
+            p=1
+            for j in range(n):
+                if i!=j:
+                    p=p*(xp-x[j])/(x[i]-x[j])
+            yp = yp+p*y[i]
+        # print('Interpolated value at %.3f is %.3f.' % (xp, yp))
+        return yp
+        # for i in range(n):
+        #     a[i]=projekt.mianownik(x,i,n,y)    
+        # for i in range (n):
+        #     for j in range(len(iks)):
+        #         x1+=projekt.mianownik1(x,iks[i],i,n)
+        # for i in range (n): 
+        #     W+=a[i]*x1
+        # return W
 
     def interpolacja_l(self,ma,iks):
         n=21
@@ -211,11 +225,26 @@ class Projekt:
             ys=(projekt.fun1(K1[0],K1[1],K1[2],xs))
             cp+=h*((y[i]+y[i+1]+4*ys)/6)
         return cp
+    def interl(self,ma):
+        x=np.linspace(0,2,21)
+        y=np.zeros(21)
+        for i in range(21):
+            y[i]=ma[i+21,2]
+        
+        xplt=np.linspace(x[0],x[-1])
+        yplt=np.array([],float)
 
+        for xp in xplt:
+            yp =0
+            for xi,yi in zip(x,y):
+                yp+=yi*np.prod((xp-x[x!=xi])/(xi-x[x!=xi]))
+            yplt=np.append(yplt,yp)
+        plt.plot(x,y,'ro',xplt,yplt,'b-')
+        plt.show()
 projekt = Projekt()
 x, y, z = projekt.wyznacz_xyz(ma, n)
-projekt.wykres2D(x, y, z)
-projekt.Wykres3D(x, y, z)
+# projekt.wykres2D(x, y, z)
+# projekt.Wykres3D(x, y, z)
 # print(projekt.sredniamedianaodchylenie(x,y,z))
 # print ("Interpolacja lagrandża")
 # projekt.interpolacja_l(ma,z)
@@ -226,12 +255,20 @@ a=0
 b=2
 K1=projekt.aproksymacja1(ma)
 X=sp.symbols('x')
+iks=np.linspace(0,2,21)
+w=np.zeros(len(iks))
+for i in range(len(iks)):
+    w[i]=projekt.interpolacja_l1(ma,iks[i])
+plt.plot(iks,w,'-b')
+plt.show()
+jd=projekt.interpolacja_l1(ma,0.2)
+print("funkcja w punkcie 0.2",jd)
+# cd1 = sp.integrate(projekt.interpolacja_l1(ma,X),(X,a,b))
+# cd = sp.integrate(projekt.fun1(K1[0],K1[1],K1[2],X),(X,a,b))
+# sa=projekt.calkSa(K1)
+# print ("Całka: ",cd," Całka SA: ",cd1)
 
-cd = sp.integrate(projekt.fun1(K1[0],K1[1],K1[2],X),(X,a,b))
-sa=projekt.calkSa(K1)
-print ("Całka: ",cd," Całka SA: ",sa)
-
-
+projekt.interl(ma)
 
 x1=np.zeros(21)
 y1=np.zeros(21)
@@ -241,8 +278,6 @@ for i in range (21,42,1):
     y1[i-21]=z[i]
     z1[i-21]=z[i]
 iks=np.linspace(0,2,100)
-plt.plot(projekt.interpolacja_l1(ma,iks))
-plt.show()
 
 plt.plot(iks,projekt.fun1(K1[0],K1[1],K1[2],iks),'b-',label='Wykres aproksymacji kwadratowej')
 plt.legend()
@@ -264,5 +299,3 @@ plt.show()
 # y = y_f1(x)
 # plt.scatter(x,y)
 # plt.show()
-
-
