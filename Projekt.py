@@ -240,7 +240,7 @@ for i in range (21,42,1):
     x1[i-21]=x[i]
     y1[i-21]=z[i]
     z1[i-21]=z[i]
-iks=np.linspace(0,2,100)
+iks=np.linspace(0,2,101)
 plt.plot(projekt.interpolacja_l1(ma,iks))
 plt.show()
 
