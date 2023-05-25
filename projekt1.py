@@ -7,6 +7,7 @@ from scipy.interpolate import interp2d
 from scipy.integrate import quad
 from scipy.integrate import solve_ivp
 from scipy.integrate import dblquad
+from scipy.spatial import Delaunay
 import sympy as sp
 
 
@@ -477,6 +478,20 @@ class Projekt:
         plt.plot(iks, projekt.f1(K1[0], K1[1], K1[2], iks))
         plt.plot(X, Y, 'bo')
         plt.show()
+    def pole(sefl,x1,y1,z1):
+        points = np.column_stack((x1, y1, z1))
+        tri = Delaunay(points[:, :2])
+
+        triangle_areas = []
+        for simplex in tri.simplices:
+            p0, p1, p2 = points[simplex]
+            triangle_areas.append(
+                0.5 * np.linalg.norm(
+                    np.cross(p1 - p0, p2 - p0)
+                )
+            )
+        surface_area = np.sum(triangle_areas)
+        print("Pole powierzchni: ", surface_area)
 
     def calkSa(self, K1):
         cp = 0
@@ -551,6 +566,8 @@ projekt.wyznacz(z, n, m, ma)
 # projekt.odchylenie(y,z)
 projekt.funN(x[2],z[2])
 projekt.funl(x[2], z[2])
+
+projekt.pole(x1,y1,z1)
 
 # projekt.funA(x[2], z[2])
 
