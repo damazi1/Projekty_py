@@ -229,7 +229,7 @@ class Projekt:
 
     def f1(self, a0, a1, a2, x):
         return a0+a1*x+a2*x**2
-    def fx1(self,a1,a2):
+    def fx1(self,a1,a2,x):
         return a1+a2*x
     def aproksymacja4(self, x, y):
         M1 = np.zeros((4, 4))
@@ -401,18 +401,32 @@ class Projekt:
             cp += h*((y[i]+y[i+1]+4*ys)/6)
         return cp
 
+    def wypz(self,x,z1,K1,zxA):
+        z1=(projekt.f1(K1[0],K1[1],K1[2],x))
+        zxA=projekt.fx1(K1[1],K1[2],x)
+        return z1,zxA
+
+    def poch(self,zx,pz,px):
+        n=3
+        for i in range (n):
+            if(i==0):
+                zx[i]=(pz[i+1]-pz[i])/(px[i+1]-px[i])
+            elif(i==n-1):
+                zx[i]=(pz[i]-pz[i-1])/(px[i]-px[i-1])
+            else:
+                zx[i]=(pz[i+1]-pz[i-1])/(px[i+1]-px[i-1])
 
 
 projekt = Projekt()
 x1, y1, z1 = projekt.wyznacz_xyz(ma)
 projekt.wyznacz(z, n, m, ma)
-projekt.wykres2D(x1,y1,z1)
-projekt.wykres3D(x1, y1, z1)
-projekt.srednia(y1,z1)
-projekt.mediana(y1,z1)
-projekt.odchylenie(y1,z1)
-projekt.funl(x[2], z[2])
-projekt.funA(x[2], z[2])
+# projekt.wykres2D(x1,y1,z1)
+# projekt.wykres3D(x1, y1, z1)
+# projekt.srednia(y1,z1)
+# projekt.mediana(y1,z1)
+# projekt.odchylenie(y1,z1)
+# projekt.funl(x[2], z[2])
+# projekt.funA(x[2], z[2])
 
 
 x3 = np.zeros(4)
@@ -444,3 +458,38 @@ K2=projekt.lan(x3,y3,iks,4)
 cd1 = sp.integrate(projekt.lan(x3,y3,X,4),(X,a,b))
 sa1=projekt.calkSa1(x3,y3)
 print ("Całkal: ",cd1," Całka SAl: ",sa1)
+
+z1=np.zeros(3)
+zx1=np.zeros(3)
+
+x7 = np.zeros(3)
+y7 = np.zeros(3)
+
+x7[0] = x[2][18]
+x7[1] = x[2][19]
+x7[2] = x[2][20]
+
+
+y7[0] = z[2][18]
+y7[1] = z[2][19]
+y7[2] = z[2][20]
+
+K3=projekt.aproksymacja3(x7,y7)
+
+z1,zx1=projekt.wypz(x7,z1,K1,zx1)
+
+zx=np.zeros(3)
+
+projekt.poch(zx,y7,x7)
+
+print (z1,"   ",zx1)
+
+Rpx=zx-zx1
+
+plt.plot(x7,zx,'b',label="pochodna funkcji")
+plt.plot(x7,zx1,'--r',label="pochodna sprawdzenie ")
+plt.plot(x7,Rpx,'orange',label='roznica')
+plt.legend()
+plt.xlabel("oś x")
+plt.ylabel("oś y")
+plt.show()
