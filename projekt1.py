@@ -318,7 +318,7 @@ class Projekt:
         y_new = projekt.newton(a_s, x7, x_new)
         plt.plot(x_new, y_new)
         plt.plot(X, Y, 'bo')
-
+        plt.show()
 
     def aproksymacja3(self, x, y):
         M1 = np.zeros((3, 3))
@@ -524,11 +524,11 @@ class Projekt:
         h=(b-a)/n
         for i in range(n+1):
             x[i]=a+i*h
-            y[i]=(projekt.lan(x3,y3,x[i],4))
+            y[i]=(projekt.lan(x,y,x[i],4))
             h = (b-a)/n
         for i in range(n):
             xs = (x[i]+x[i+1])/2
-            ys = (projekt.lan(x3,y3,xs,4))
+            ys = (projekt.lan(x,y,xs,4))
             cp += h*((y[i]+y[i+1]+4*ys)/6)
         return cp
 
@@ -555,7 +555,7 @@ class Projekt:
         differences = [data[i] - data[i-1] for i in range(1, len(data))]
         return all(diff >= 0 for diff in differences) or all(diff <= 0 for diff in differences)
 
-    def iniciuj(X, Y):
+    def iniciuj(self,X, Y):
         x1 = np.zeros(4)
         x2 = np.zeros(4)
         x3 = np.zeros(4)
@@ -681,12 +681,14 @@ projekt.wyznacz(z, n, m, ma)
 # projekt.srednia(y,z)
 # projekt.mediana(y,z)
 # projekt.odchylenie(y,z)
-projekt.funN(x[2],z[2])
-projekt.funl(x[2], z[2])
+# projekt.funN(x[2],z[2])
+# projekt.funl(x[2], z[2])
 
-projekt.pole(x1,y1,z1)
+# projekt.iniciuj(x[2],z[2])
 
-# projekt.funA(x[2], z[2])
+# projekt.pole(x1,y1,z1)
+
+projekt.funA(x[2], z[2])
 
 
 # x3 = np.zeros(4)
