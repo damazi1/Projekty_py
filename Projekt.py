@@ -277,6 +277,8 @@ for i in range(len(iks)):
     w[i]=projekt.interpolacja_l1(ma,iks[i])
 plt.plot(x1,z1,'bo')
 plt.plot(iks,w,'-b')
+iks=np.linspace(0,2,101)
+plt.plot(projekt.interpolacja_l1(ma,iks))
 plt.show()
 iks=np.linspace(0,2,100)
 

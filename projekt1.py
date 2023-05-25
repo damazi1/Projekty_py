@@ -1,44 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
-ma = np.loadtxt('136700.dat')
-n = ma.shape[0]
-
-def divided_diff(x, y):
-    n = len(y)
-    coef = np.zeros([n, n])
-    # the first column is y
-    coef[:,0] = y
-    
-    for j in range(1,n):
-        for i in range(n-j):
-            coef[i][j] = \
-           (coef[i+1][j-1] - coef[i][j-1]) / (x[i+j]-x[i])
-            
-    return coef
-
-def newton_poly(coef, x_data, x):
-    n = len(x_data) - 1 
-    p = coef[n]
-    for k in range(1,n+1):
-        p = coef[n-k] + (x -x_data[n-k])*p
-    return p
-x=np.zeros(21)
-y=np.zeros(21)
-for i in range(21):
-    x[i]=ma[i+21,0]
-    y[i]=ma[i+21,2]
-# get the divided difference coef
-a_s = divided_diff(x, y)[0, :]
-
-# evaluate on new data points
-x_new = np.arange(0.3,1.71,0.01)
-y_new = newton_poly(a_s, x, x_new)
-
-plt.figure(figsize = (12, 8))
-plt.plot(x, y, 'bo')
-plt.plot(x_new, y_new)
-plt.show()
 from mpl_toolkits.mplot3d import Axes3D
 from scipy.interpolate import lagrange
 from scipy.interpolate import interp1d
@@ -46,9 +7,7 @@ from scipy.interpolate import interp2d
 from scipy.integrate import quad
 from scipy.integrate import solve_ivp
 from scipy.integrate import dblquad
-from scipy.spatial import Delaunay
 import sympy as sp
-
 
 
 ma = np.loadtxt('136700.dat')
@@ -270,7 +229,8 @@ class Projekt:
 
     def f1(self, a0, a1, a2, x):
         return a0+a1*x+a2*x**2
-
+    def fx1(self,a1,a2):
+        return a1+a2*x
     def aproksymacja4(self, x, y):
         M1 = np.zeros((4, 4))
         P1 = np.zeros(4)
@@ -402,29 +362,85 @@ class Projekt:
         plt.plot(X, Y, 'bo')
         plt.show()
 
-    def pole(sefl,x1,y1,z1):
-        points = np.column_stack((x1, y1, z1))
-        tri = Delaunay(points[:, :2])
+    def calkSa(self, K1):
+        cp = 0
+        xs = 0
+        ys = 0
+        n=10
+        a = 0
+        b = 2
+        x=np.zeros(n+1)
+        y=np.zeros(n+1)
+        h=(b-a)/n
+        for i in range(n+1):
+            x[i]=a+i*h
+            y[i]=(projekt.f2(K1[0], K1[1], K1[2],K1[3], x[i]))
+            h = (b-a)/n
+        for i in range(n):
+            xs = (x[i]+x[i+1])/2
+            ys = (projekt.f2(K1[0], K1[1], K1[2],K1[3], xs))
+            cp += h*((y[i]+y[i+1]+4*ys)/6)
+        return cp
+    def calkSa1(self, x,y):
+        cp = 0
+        xs = 0
+        ys = 0
+        n=10
+        a = 0
+        b = 2
+        x=np.zeros(n+1)
+        y=np.zeros(n+1)
+        h=(b-a)/n
+        for i in range(n+1):
+            x[i]=a+i*h
+            y[i]=(projekt.lan(x3,y3,x[i],4))
+            h = (b-a)/n
+        for i in range(n):
+            xs = (x[i]+x[i+1])/2
+            ys = (projekt.lan(x3,y3,xs,4))
+            cp += h*((y[i]+y[i+1]+4*ys)/6)
+        return cp
 
-        triangle_areas = []
-        for simplex in tri.simplices:
-            p0, p1, p2 = points[simplex]
-            triangle_areas.append(
-                0.5 * np.linalg.norm(
-                    np.cross(p1 - p0, p2 - p0)
-                )
-            )
-        surface_area = np.sum(triangle_areas)
-        print("Pole powierzchni: ", surface_area)
+
 
 projekt = Projekt()
 x1, y1, z1 = projekt.wyznacz_xyz(ma)
 projekt.wyznacz(z, n, m, ma)
-# projekt.wykres2D(x1,y1,z1)
+projekt.wykres2D(x1,y1,z1)
 projekt.wykres3D(x1, y1, z1)
-# projekt.srednia(y1,z1)
-# projekt.mediana(y1,z1)
-# projekt.odchylenie(y1,z1)
+projekt.srednia(y1,z1)
+projekt.mediana(y1,z1)
+projekt.odchylenie(y1,z1)
 projekt.funl(x[2], z[2])
 projekt.funA(x[2], z[2])
-projekt.pole(x1,y1,z1)
+
+
+x3 = np.zeros(4)
+y3 = np.zeros(4)
+
+x3[0] = x[2][6]
+x3[1] = x[2][7]
+x3[2] = x[2][8]
+x3[3] = x[2][9]
+
+y3[0] = z[2][6]
+y3[1] = z[2][7]
+y3[2] = z[2][8]
+y3[3] = z[2][9]
+
+X=sp.symbols('x')
+
+K1=projekt.aproksymacja4(x3,y3)
+a=0
+b=2
+
+cd = sp.integrate(projekt.f2(K1[0],K1[1],K1[2],K1[3],X),(X,a,b))
+sa=projekt.calkSa(K1)
+print ("CałkaA: ",cd," Całka SAA: ",sa)
+
+iks=np.linspace(x3[0],x3[3],10)
+K2=projekt.lan(x3,y3,iks,4)
+
+cd1 = sp.integrate(projekt.lan(x3,y3,X,4),(X,a,b))
+sa1=projekt.calkSa1(x3,y3)
+print ("Całkal: ",cd1," Całka SAl: ",sa1)
