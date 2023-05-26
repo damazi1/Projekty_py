@@ -102,93 +102,18 @@ class Projekt:
 
     def funl(self, X, Y):
         plt.plot(X, Y, 'bo')
-        x1 = np.zeros(4)
-        x2 = np.zeros(4)
-        x3 = np.zeros(4)
-        x4 = np.zeros(4)
-        x5 = np.zeros(4)
-        x6 = np.zeros(4)
-        x7 = np.zeros(3)
-
-        y1 = np.zeros(4)
-        y2 = np.zeros(4)
-        y3 = np.zeros(4)
-        y4 = np.zeros(4)
-        y5 = np.zeros(4)
-        y6 = np.zeros(4)
-        y7 = np.zeros(3)
-
-        x1[0] = X[0]
-        x1[1] = X[1]
-        x1[2] = X[2]
-        x1[3] = X[3]
-        x2[0] = X[3]
-        x2[1] = X[4]
-        x2[2] = X[5]
-        x2[3] = X[6]
-        x3[0] = X[6]
-        x3[1] = X[7]
-        x3[2] = X[8]
-        x3[3] = X[9]
-        x4[0] = X[9]
-        x4[1] = X[10]
-        x4[2] = X[11]
-        x4[3] = X[12]
-        x5[0] = X[12]
-        x5[1] = X[13]
-        x5[2] = X[14]
-        x5[3] = X[15]
-        x6[0] = X[15]
-        x6[1] = X[16]
-        x6[2] = X[17]
-        x6[3] = X[18]
-        x7[0] = X[18]
-        x7[1] = X[19]
-        x7[2] = X[20]
-
-        y1[0] = Y[0]
-        y1[1] = Y[1]
-        y1[2] = Y[2]
-        y1[3] = Y[3]
-        y2[0] = Y[3]
-        y2[1] = Y[4]
-        y2[2] = Y[5]
-        y2[3] = Y[6]
-        y3[0] = Y[6]
-        y3[1] = Y[7]
-        y3[2] = Y[8]
-        y3[3] = Y[9]
-        y4[0] = Y[9]
-        y4[1] = Y[10]
-        y4[2] = Y[11]
-        y4[3] = Y[12]
-        y5[0] = Y[12]
-        y5[1] = Y[13]
-        y5[2] = Y[14]
-        y5[3] = Y[15]
-        y6[0] = Y[15]
-        y6[1] = Y[16]
-        y6[2] = Y[17]
-        y6[3] = Y[18]
-        y7[0] = Y[18]
-        y7[1] = Y[19]
-        y7[2] = Y[20]
-
-        iks = np.linspace(x1[0], x1[3], 100)
-        plt.plot(iks, projekt.lan(x1, y1, iks, 4))
-        iks = np.linspace(x2[0], x2[3], 100)
-        plt.plot(iks, projekt.lan(x2, y2, iks, 4))
-        iks = np.linspace(x3[0], x3[3], 100)
-        plt.plot(iks, projekt.lan(x3, y3, iks, 4))
-        iks = np.linspace(x4[0], x4[3], 100)
-        plt.plot(iks, projekt.lan(x4, y4, iks, 4))
-        iks = np.linspace(x5[0], x5[3], 100)
-        plt.plot(iks, projekt.lan(x5, y5, iks, 4))
-        iks = np.linspace(x6[0], x6[3], 100)
-        plt.plot(iks, projekt.lan(x6, y6, iks, 4))
-        iks = np.linspace(x7[0], x7[2], 100)
-        plt.plot(iks, projekt.lan(x7, y7, iks, 3))
-
+        X=np.round(X,2)
+        x1 = [X[i:i+4] for i in range(0,len(X)-1,3)]
+        y1 = [Y[i:i+4] for i in range(0,len(Y)-1,3)]
+        for i in range(len(x1)):
+            m=len(x1[i])-1
+            print (m)
+            iks = np.linspace(x1[i][0], x1[i][m], 101)
+            plt.plot(iks, projekt.lan(x1[i], y1[i], iks, m+1), label=(f"{x1[i][0]}-{x1[i][m]}"))
+        plt.legend()
+        plt.title("Interpolacja Lagrange'a")
+        plt.xlabel("oś X")
+        plt.ylabel("oś Y")
         plt.show()
     def roznica(self,x, y):
 
@@ -213,112 +138,37 @@ class Projekt:
 
 
     def funN(self,X, Y):
-        x1 = np.zeros(4)
-        x2 = np.zeros(4)
-        x3 = np.zeros(4)
-        x4 = np.zeros(4)
-        x5 = np.zeros(4)
-        x6 = np.zeros(4)
-        x7 = np.zeros(3)
-
-        y1 = np.zeros(4)
-        y2 = np.zeros(4)
-        y3 = np.zeros(4)
-        y4 = np.zeros(4)
-        y5 = np.zeros(4)
-        y6 = np.zeros(4)
-        y7 = np.zeros(3)
-
-        x1[0] = X[0]
-        x1[1] = X[1]
-        x1[2] = X[2]
-        x1[3] = X[3]
-        x2[0] = X[3]
-        x2[1] = X[4]
-        x2[2] = X[5]
-        x2[3] = X[6]
-        x3[0] = X[6]
-        x3[1] = X[7]
-        x3[2] = X[8]
-        x3[3] = X[9]
-        x4[0] = X[9]
-        x4[1] = X[10]
-        x4[2] = X[11]
-        x4[3] = X[12]
-        x5[0] = X[12]
-        x5[1] = X[13]
-        x5[2] = X[14]
-        x5[3] = X[15]
-        x6[0] = X[15]
-        x6[1] = X[16]
-        x6[2] = X[17]
-        x6[3] = X[18]
-        x7[0] = X[18]
-        x7[1] = X[19]
-        x7[2] = X[20]
-
-        y1[0] = Y[0]
-        y1[1] = Y[1]
-        y1[2] = Y[2]
-        y1[3] = Y[3]
-        y2[0] = Y[3]
-        y2[1] = Y[4]
-        y2[2] = Y[5]
-        y2[3] = Y[6]
-        y3[0] = Y[6]
-        y3[1] = Y[7]
-        y3[2] = Y[8]
-        y3[3] = Y[9]
-        y4[0] = Y[9]
-        y4[1] = Y[10]
-        y4[2] = Y[11]
-        y4[3] = Y[12]
-        y5[0] = Y[12]
-        y5[1] = Y[13]
-        y5[2] = Y[14]
-        y5[3] = Y[15]
-        y6[0] = Y[15]
-        y6[1] = Y[16]
-        y6[2] = Y[17]
-        y6[3] = Y[18]
-        y7[0] = Y[18]
-        y7[1] = Y[19]
-        y7[2] = Y[20]
-
-        a_s = projekt.roznica(x1, y1)[0, :]
-        x_new = np.linspace(x1[0], x1[3], 101)
-        y_new = projekt.newton(a_s, x1, x_new)
-        plt.plot(x_new, y_new)
-        a_s = projekt.roznica(x2, y2)[0, :]
-        x_new = np.linspace(x2[0], x2[3], 101)
-        y_new = projekt.newton(a_s, x2, x_new)
-        plt.plot(x_new, y_new)
-        a_s = projekt.roznica(x3, y3)[0, :]
-        x_new = np.linspace(x3[0], x3[3], 101)
-        y_new = projekt.newton(a_s, x3, x_new)
-        plt.plot(x_new, y_new)
-        a_s = projekt.roznica(x4, y4)[0, :]
-        x_new = np.linspace(x4[0], x4[3], 101)
-        y_new = projekt.newton(a_s, x4, x_new)
-        plt.plot(x_new, y_new)
-        a_s = projekt.roznica(x4, y4)[0, :]
-        x_new = np.linspace(x4[0], x4[3], 101)
-        y_new = projekt.newton(a_s, x4, x_new)
-        plt.plot(x_new, y_new)
-        a_s = projekt.roznica(x5, y5)[0, :]
-        x_new = np.linspace(x5[0], x5[3], 101)
-        y_new = projekt.newton(a_s, x5, x_new)
-        plt.plot(x_new, y_new)
-        a_s = projekt.roznica(x6, y6)[0, :]
-        x_new = np.linspace(x6[0], x6[3], 101)
-        y_new = projekt.newton(a_s, x6, x_new)
-        plt.plot(x_new, y_new)
-        a_s = projekt.roznica(x7, y7)[0, :]
-        x_new = np.linspace(x7[0], x7[2], 101)
-        y_new = projekt.newton(a_s, x7, x_new)
-        plt.plot(x_new, y_new)
+        X=np.round(X,2)
+        x1 = [X[i:i+4] for i in range(0,len(X)-1,3)]
+        y1 = [Y[i:i+4] for i in range(0,len(Y)-1,3)]
+        for i in range(len(x1)):
+            m=len(x1[i])-1
+            iks=np.linspace(x1[i][0],x1[i][m],101)
+            y=projekt.newton(projekt.roznica(x1[i],y1[i])[0,:],x1[i],iks)
+            plt.plot(iks, y,label=(f"{x1[i][0]}-{x1[i][m]}"))
         plt.plot(X, Y, 'bo')
+        plt.legend()
+        plt.title("Interpolacja Newtona")
+        plt.xlabel("oś X")
+        plt.ylabel("oś Y")
         plt.show()
+
+    def aproksymacja2(self,x,y):
+        M=np.zeros((2,2))
+        P=np.zeros (2)
+        n=2
+        M[0][0]=n
+        for i in range (n):
+            M[0][1]=M[1][0]+x[i]
+            M[1][0]=M[1][0]+x[i]
+            M[1][1]=M[1][1]+x[i]**2
+        for i in range (n):
+            P[0]=P[0]+y[i]
+            P[1]=P[1]+x[i]*y[i]
+        K=np.linalg.solve(M,P)
+        return K
+    def f0(self,a0,a1,x):
+        return a0+a1*x
 
     def aproksymacja3(self, x, y):
         M1 = np.zeros((3, 3))
@@ -383,106 +233,40 @@ class Projekt:
         return a0+a1*x+a2*x**2+a3*x**3
 
     def funA(self, X, Y):
-        x1 = np.zeros(4)
-        x2 = np.zeros(4)
-        x3 = np.zeros(4)
-        x4 = np.zeros(4)
-        x5 = np.zeros(4)
-        x6 = np.zeros(4)
-        x7 = np.zeros(3)
-
-        y1 = np.zeros(4)
-        y2 = np.zeros(4)
-        y3 = np.zeros(4)
-        y4 = np.zeros(4)
-        y5 = np.zeros(4)
-        y6 = np.zeros(4)
-        y7 = np.zeros(3)
-
-        x1[0] = X[0]
-        x1[1] = X[1]
-        x1[2] = X[2]
-        x1[3] = X[3]
-        x2[0] = X[3]
-        x2[1] = X[4]
-        x2[2] = X[5]
-        x2[3] = X[6]
-        x3[0] = X[6]
-        x3[1] = X[7]
-        x3[2] = X[8]
-        x3[3] = X[9]
-        x4[0] = X[9]
-        x4[1] = X[10]
-        x4[2] = X[11]
-        x4[3] = X[12]
-        x5[0] = X[12]
-        x5[1] = X[13]
-        x5[2] = X[14]
-        x5[3] = X[15]
-        x6[0] = X[15]
-        x6[1] = X[16]
-        x6[2] = X[17]
-        x6[3] = X[18]
-        x7[0] = X[18]
-        x7[1] = X[19]
-        x7[2] = X[20]
-
-        y1[0] = Y[0]
-        y1[1] = Y[1]
-        y1[2] = Y[2]
-        y1[3] = Y[3]
-        y2[0] = Y[3]
-        y2[1] = Y[4]
-        y2[2] = Y[5]
-        y2[3] = Y[6]
-        y3[0] = Y[6]
-        y3[1] = Y[7]
-        y3[2] = Y[8]
-        y3[3] = Y[9]
-        y4[0] = Y[9]
-        y4[1] = Y[10]
-        y4[2] = Y[11]
-        y4[3] = Y[12]
-        y5[0] = Y[12]
-        y5[1] = Y[13]
-        y5[2] = Y[14]
-        y5[3] = Y[15]
-        y6[0] = Y[15]
-        y6[1] = Y[16]
-        y6[2] = Y[17]
-        y6[3] = Y[18]
-        y7[0] = Y[18]
-        y7[1] = Y[19]
-        y7[2] = Y[20]
-
-        K1 = projekt.aproksymacja4(x1, y1)
-        iks = np.linspace(x1[0], x1[3], 100)
-        plt.plot(iks, projekt.f2(K1[0], K1[1], K1[2], K1[3], iks))
-        K1 = projekt.aproksymacja4(x2, y2)
-        iks = np.linspace(x2[0], x2[3], 100)
-        plt.plot(iks, projekt.f2(K1[0], K1[1], K1[2], K1[3], iks))
-        K1 = projekt.aproksymacja4(x3, y3)
-        iks = np.linspace(x3[0], x3[3], 100)
-        plt.plot(iks, projekt.f2(K1[0], K1[1], K1[2], K1[3], iks))
-        K1 = projekt.aproksymacja4(x4, y4)
-        iks = np.linspace(x4[0], x4[3], 100)
-        plt.plot(iks, projekt.f2(K1[0], K1[1], K1[2], K1[3], iks))
-        K1 = projekt.aproksymacja4(x5, y5)
-        iks = np.linspace(x5[0], x5[3], 100)
-        plt.plot(iks, projekt.f2(K1[0], K1[1], K1[2], K1[3], iks))
-        K1 = projekt.aproksymacja4(x6, y6)
-        iks = np.linspace(x6[0], x6[3], 100)
-        plt.plot(iks, projekt.f2(K1[0], K1[1], K1[2], K1[3], iks))
-        K1 = projekt.aproksymacja3(x7, y7)
-        iks = np.linspace(x7[0], x7[2], 100)
-        plt.plot(iks, projekt.f1(K1[0], K1[1], K1[2], iks))
+        X=np.round(X,2)
+        x1 = [X[i:i+3] for i in range(0,len(X)-1,2)]
+        y1 = [Y[i:i+3] for i in range(0,len(Y)-1,2)]
+        for i in range(len(x1)):
+            m=len(x1[i])-1
+            K1 = projekt.aproksymacja3(x1[i], y1[i])
+            iks = np.linspace(x1[i][0], x1[i][m], 101)
+            plt.plot(iks, projekt.f1(K1[0], K1[1], K1[2], iks),label=(f"{x1[i][0]}-{x1[i][m]}"))
         plt.plot(X, Y, 'bo')
+        plt.legend()
+        plt.title("Aproksymacja Średnio-kwadratowa")
+        plt.xlabel("oś X")
+        plt.ylabel("oś Y")
         plt.show()
+    def funAl(self, X, Y):
+        X=np.round(X,2)
+        x1 = [X[i:i+2] for i in range(0,len(X)-1,1)]
+        y1 = [Y[i:i+2] for i in range(0,len(Y)-1,1)]
+        for i in range(len(x1)):
+            m=len(x1[i])-1
+            K1 = projekt.aproksymacja2(x1[i], y1[i])
+            iks = np.linspace(x1[i][0], x1[i][m], 101)
+            plt.plot(iks, projekt.f0(K1[0], K1[1],iks),label=(f"{x1[i][0]}-{x1[i][m]}"))
+        plt.plot(X, Y, 'bo')
+        plt.legend()
+        plt.title("Aproksymacja Liniowa")
+        plt.xlabel("oś X")
+        plt.ylabel("oś Y")
+
     def pole(sefl,ma):
         tri = Delaunay(ma[:, :2])
         triangle_areas = []
-        for simplex in tri.simplices:
-            p0, p1, p2 = ma[simplex]
+        for i in tri.simplices:
+            p0, p1, p2 = ma[i]
             triangle_areas.append(
                 0.5 * np.linalg.norm(
                     np.cross(p1 - p0, p2 - p0)
@@ -491,23 +275,24 @@ class Projekt:
         surface_area = np.sum(triangle_areas)
         print("Pole powierzchni: ", surface_area)
 
-    def calkSa(self, K1):
+    def calkSa(self, K1,x1):
         cp = 0
         xs = 0
         ys = 0
         n=10
-        a = 0
-        b = 2
+        a=x1[0]
+        b=x1[2]
+
         x=np.zeros(n+1)
         y=np.zeros(n+1)
         h=(b-a)/n
         for i in range(n+1):
             x[i]=a+i*h
-            y[i]=(projekt.f2(K1[0], K1[1], K1[2],K1[3], x[i]))
+            y[i]=(projekt.f1(K1[0], K1[1], K1[2],x[i]))
             h = (b-a)/n
         for i in range(n):
             xs = (x[i]+x[i+1])/2
-            ys = (projekt.f2(K1[0], K1[1], K1[2],K1[3], xs))
+            ys = (projekt.f1(K1[0], K1[1], K1[2],xs))
             cp += h*((y[i]+y[i+1]+4*ys)/6)
         return cp
     def calkSa1(self, x3,y3):
@@ -515,20 +300,40 @@ class Projekt:
         xs = 0
         ys = 0
         n=10
-        a = 0
-        b = 2
+        a=x3[0]
+        b=x3[2]
+
         x=np.zeros(n+1)
         y=np.zeros(n+1)
         h=(b-a)/n
         for i in range(n+1):
             x[i]=a+i*h
-            y[i]=(projekt.lan(x3,y3,x[i],4))
+            y[i]=(projekt.lan(x3,y3,x[i],3))
             h = (b-a)/n
         for i in range(n):
             xs = (x[i]+x[i+1])/2
-            ys = (projekt.lan(x3,y3,xs,4))
+            ys = (projekt.lan(x3,y3,xs,3))
             cp += h*((y[i]+y[i+1]+4*ys)/6)
         return cp
+    
+    def calkiIiA(self,x,z):
+        x1 = [x[2][i:i+3] for i in range(0,len(x[0])-1,2)]
+        y1 = [z[2][i:i+3] for i in range(0,len(z[0])-1,2)]
+
+        X=sp.symbols('x')
+
+        K1=projekt.aproksymacja3(x1[2],y1[2])
+        a=x1[2][0]
+        b=x1[2][2]
+        print(projekt.f1(K1[0],K1[1],K1[2],X))
+        cd = sp.integrate(projekt.f1(K1[0],K1[1],K1[2],X),(X,a,b))
+        sa=projekt.calkSa(K1,x1[2])
+        print ("Całka Dokładna: ",cd," Całka z Aproksymacji średnio-kwadratowej: ",sa)
+
+        cd1 = sp.integrate(projekt.lan(x1[2],y1[2],X,3),(X,a,b))
+        sa1=projekt.calkSa1(x1[2],y1[2])
+        print ("Całka Dokładna: ",cd1," Całka z interpolacij Lagrange'a: ",sa1)
+
 
     def wypz(self,x,K1,):
         z1=np.zeros(20)
@@ -554,125 +359,37 @@ class Projekt:
         return all(diff >= 0 for diff in differences) or all(diff <= 0 for diff in differences)
 
     def iniciuj(self,X, Y):
-        x1 = np.zeros(4)
-        x2 = np.zeros(4)
-        x3 = np.zeros(4)
-        x4 = np.zeros(4)
-        x5 = np.zeros(4)
-        x6 = np.zeros(4)
-        x7 = np.zeros(3)
+        X=np.round(X,2)
+        x1 = [X[i:i+4] for i in range(0,len(X)-1,3)]
+        y1 = [Y[i:i+4] for i in range(0,len(Y)-1,3)]
+        for i in range(len(x1)):
+            m=len(x1[i])-1
+            x_new=np.linspace(x1[i][0],x1[i][m],10)
+            y_new=projekt.newton(projekt.roznica(x1[i],y1[i])[0,:],x1[i],x_new)
+            print(projekt.lan(x1[i],y1[i],x_new,m+1)-y_new)
 
-        y1 = np.zeros(4)
-        y2 = np.zeros(4)
-        y3 = np.zeros(4)
-        y4 = np.zeros(4)
-        y5 = np.zeros(4)
-        y6 = np.zeros(4)
-        y7 = np.zeros(3)
-
-        x1[0] = X[0]
-        x1[1] = X[1]
-        x1[2] = X[2]
-        x1[3] = X[3]
-        x2[0] = X[3]
-        x2[1] = X[4]
-        x2[2] = X[5]
-        x2[3] = X[6]
-        x3[0] = X[6]
-        x3[1] = X[7]
-        x3[2] = X[8]
-        x3[3] = X[9]
-        x4[0] = X[9]
-        x4[1] = X[10]
-        x4[2] = X[11]
-        x4[3] = X[12]
-        x5[0] = X[12]
-        x5[1] = X[13]
-        x5[2] = X[14]
-        x5[3] = X[15]
-        x6[0] = X[15]
-        x6[1] = X[16]
-        x6[2] = X[17]
-        x6[3] = X[18]
-        x7[0] = X[18]
-        x7[1] = X[19]
-        x7[2] = X[20]
-
-        y1[0] = Y[0]
-        y1[1] = Y[1]
-        y1[2] = Y[2]
-        y1[3] = Y[3]
-        y2[0] = Y[3]
-        y2[1] = Y[4]
-        y2[2] = Y[5]
-        y2[3] = Y[6]
-        y3[0] = Y[6]
-        y3[1] = Y[7]
-        y3[2] = Y[8]
-        y3[3] = Y[9]
-        y4[0] = Y[9]
-        y4[1] = Y[10]
-        y4[2] = Y[11]
-        y4[3] = Y[12]
-        y5[0] = Y[12]
-        y5[1] = Y[13]
-        y5[2] = Y[14]
-        y5[3] = Y[15]
-        y6[0] = Y[15]
-        y6[1] = Y[16]
-        y6[2] = Y[17]
-        y6[3] = Y[18]
-        y7[0] = Y[18]
-        y7[1] = Y[19]
-        y7[2] = Y[20]
-
-        a_s = projekt.roznica(x1, y1)[0, :]
-        x_new = np.linspace(x1[0], x1[3], 10)
-        y_new = projekt.newton(a_s, x1, x_new)
-        plt.plot(x_new, y_new)
-        iks = np.linspace(x1[0], x1[3], 10)
-        print(projekt.lan(x1, y1, iks, 4)-y_new)
-        a_s = projekt.roznica(x2, y2)[0, :]
-        x_new = np.linspace(x2[0], x2[3], 10)
-        y_new = projekt.newton(a_s, x2, x_new)
-        plt.plot(x_new, y_new)
-        iks = np.linspace(x2[0], x2[3], 10)
-        print(projekt.lan(x2, y2, iks, 4)-y_new)
-        a_s = projekt.roznica(x3, y3)[0, :]
-        x_new = np.linspace(x3[0], x3[3], 10)
-        y_new = projekt.newton(a_s, x3, x_new)
-        plt.plot(x_new, y_new)
-        iks = np.linspace(x3[0], x3[3], 10)
-        print(projekt.lan(x3, y3, iks, 4)-y_new)
-        a_s = projekt.roznica(x4, y4)[0, :]
-        x_new = np.linspace(x4[0], x4[3], 10)
-        y_new = projekt.newton(a_s, x4, x_new)
-        plt.plot(x_new, y_new)
-        iks = np.linspace(x4[0], x4[3], 10)
-        print(projekt.lan(x4, y4, iks, 4)-y_new)
-        a_s = projekt.roznica(x5, y5)[0, :]
-        x_new = np.linspace(x5[0], x5[3], 10)
-        y_new = projekt.newton(a_s, x5, x_new)
-        plt.plot(x_new, y_new)
-        iks = np.linspace(x5[0], x5[3], 10)
-        print(projekt.lan(x5, y5, iks, 4)-y_new)
-        a_s = projekt.roznica(x6, y6)[0, :]
-        x_new = np.linspace(x6[0], x6[3], 10)
-        y_new = projekt.newton(a_s, x6, x_new)
-        plt.plot(x_new, y_new)
-        iks = np.linspace(x6[0], x6[3], 10)
-        print(projekt.lan(x6, y6, iks, 4)-y_new)
-        a_s = projekt.roznica(x7, y7)[0, :]
-        x_new = np.linspace(x7[0], x7[2], 10)
-        y_new = projekt.newton(a_s, x7, x_new)
-        plt.plot(x_new, y_new)
-        iks = np.linspace(x7[0], x7[2], 10)
-        print(projekt.lan(x7, y7, iks, 3)-y_new)
-        plt.plot(X, Y, 'bo')
+    def iniciuj1(self,X, Y):
+        X=np.round(X,2)
+        x1 = [X[i:i+3] for i in range(0,len(X)-1,2)]
+        y1 = [Y[i:i+3] for i in range(0,len(Y)-1,2)]
+        m=len(x1[1])-1
+        K1 = projekt.aproksymacja3(x1[0], y1[0])
+        iks = np.linspace(x1[0][0], x1[0][m], 66)
+        W1=projekt.f1(K1[0], K1[1], K1[2], iks)
+        X=np.round(X,2)
+        x1 = [X[i:i+2] for i in range(0,len(X)-1,1)]
+        y1 = [Y[i:i+2] for i in range(0,len(Y)-1,1)]
+        m=len(x1[1])-1
+        K1 = projekt.aproksymacja2(x1[0], y1[0])
+        iks = np.linspace(x1[0][0], x1[0][m], 44)
+        W2=projekt.f0(K1[0], K1[1],iks)
+        print(W1[0:44],"\n",W2)
+        print(W1[0:44]-W2)
+        
+        
 
 
 projekt = Projekt()
-x1, y1, z1 = projekt.wyznacz_xyz(ma)
 projekt.wyznacz(z, n, m, ma)
 # projekt.wykres2D(x,y,z)
 # projekt.wykres3D(x,y,z)
@@ -681,44 +398,13 @@ projekt.wyznacz(z, n, m, ma)
 # projekt.odchylenie(y,z)
 # projekt.funN(x[2],z[2])
 # projekt.funl(x[2], z[2])
-
-# projekt.iniciuj(x[2],z[2])
-
-# projekt.pole(ma)
-
+# projekt.funAl(x[2],z[2])
 # projekt.funA(x[2], z[2])
+# projekt.iniciuj(x[2],z[2])
+# projekt.iniciuj1(x[2],z[2])
 
-
-x3 = np.zeros(4)
-y3 = np.zeros(4)
-
-x3[0] = x[2][6]
-x3[1] = x[2][7]
-x3[2] = x[2][8]
-x3[3] = x[2][9]
-
-y3[0] = z[2][6]
-y3[1] = z[2][7]
-y3[2] = z[2][8]
-y3[3] = z[2][9]
-
-X=sp.symbols('x')
-
-K1=projekt.aproksymacja4(x3,y3)
-a=0
-b=2
-
-cd = sp.integrate(projekt.f2(K1[0],K1[1],K1[2],K1[3],X),(X,a,b))
-sa=projekt.calkSa(K1)
-print ("Całka Dokładna: ",cd," Całka z Aproksymacji średniokwadratowej: ",sa)
-
-iks=np.linspace(x3[0],x3[3],101)
-
-cd1 = sp.integrate(projekt.lan(x3,y3,X,4),(X,a,b))
-sa1=projekt.calkSa1(x3,y3)
-print ("Całka Dokładna: ",cd1," Całka z interpolacij Lagrange'a: ",sa1)
-
-
+projekt.pole(ma)
+projekt.calkiIiA(x,z)
 
 # x7 = np.zeros(3)
 # y7 = np.zeros(3)
