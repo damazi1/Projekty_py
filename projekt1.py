@@ -354,9 +354,17 @@ class Projekt:
             else:
                 zx[i]=(pz[i+1]-pz[i-1])/(px[i+1]-px[i-1])
         return zx
-    def is_monotonic(self,data):
-        differences = [data[i] - data[i-1] for i in range(1, len(data))]
-        return all(diff >= 0 for diff in differences) or all(diff <= 0 for diff in differences)
+    
+    def poch1(self,x,z):
+        iks=np.linspace(0,2,20)
+        zx=projekt.poch(z,x)
+
+        plt.plot(iks,zx,'b',label="pochodna funkcji")
+        plt.legend()
+        plt.xlabel("oś x")
+        plt.ylabel("oś y")
+        plt.show()
+        return zx
 
     def iniciuj(self,X, Y):
         X=np.round(X,2)
@@ -403,39 +411,8 @@ projekt.wyznacz(z, n, m, ma)
 # projekt.iniciuj(x[2],z[2])
 # projekt.iniciuj1(x[2],z[2])
 
-projekt.pole(ma)
-projekt.calkiIiA(x,z)
+# projekt.pole(ma)
+# projekt.calkiIiA(x,z)
 
-# x7 = np.zeros(3)
-# y7 = np.zeros(3)
-
-# x7[0] = x[2][18]
-# x7[1] = x[2][19]
-# x7[2] = x[2][20]
-
-
-# y7[0] = z[2][18]
-# y7[1] = z[2][19]
-# y7[2] = z[2][20]
-
-# K3=projekt.aproksymacja3(x7,y7)
-# print("Wartosc aproksymacji: " ,K3)
-# iks=np.linspace(x7[0],x7[2],20)
-# z1,zx1=projekt.wypz(iks,K3)
-
-
-# zx=projekt.poch(z1,iks)
-
-# print (z1,"   ",zx1,"    ",zx)
-
-# Rpx=zx-zx1
-
-# plt.plot(iks,zx,'b',label="pochodna funkcji")
-# plt.plot(iks,zx1,'--r',label="pochodna sprawdzenie ")
-# plt.plot(iks,Rpx,'orange',label='roznica')
-# plt.legend()
-# plt.xlabel("oś x")
-# plt.ylabel("oś y")
-# plt.show()
-
-# print(projekt.is_monotonic(z[2][3:4]))
+projekt.poch1(x[2],z[2])
+# print(projekt.is_monotonic_derivative(x[2],z[2]))
