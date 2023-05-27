@@ -68,15 +68,18 @@ class Projekt:
         plt.show()
 
     def srednia(self,y,z):
+        print("Średnia arytmetyczna: ")
         for i in range(11):
             print(round(y[i][i],1),"   ",np.mean(z[i]))
             
 
     def mediana(self, y, z):
+        print("Mediana : ")
         for i in range(11):
             print(round(y[i][i],1),"   ",np.median(z[i]))
 
     def odchylenie(self, y, z):
+        print("Odchylenie standardowe: ")
         for i in range(11):
             print(round(y[i][i],1),"   ",np.std(z[i]))
 
@@ -107,7 +110,6 @@ class Projekt:
         y1 = [Y[i:i+4] for i in range(0,len(Y)-1,3)]
         for i in range(len(x1)):
             m=len(x1[i])-1
-            print (m)
             iks = np.linspace(x1[i][0], x1[i][m], 101)
             plt.plot(iks, projekt.lan(x1[i], y1[i], iks, m+1), label=(f"{x1[i][0]}-{x1[i][m]}"))
         plt.legend()
@@ -165,7 +167,7 @@ class Projekt:
         for i in range (n):
             P[0]=P[0]+y[i]
             P[1]=P[1]+x[i]*y[i]
-        K=np.linalg.solve(M,P)
+        K=projekt.gauss(M,P)
         return K
     def f0(self,a0,a1,x):
         return a0+a1*x
@@ -190,8 +192,7 @@ class Projekt:
             P1[1] += x[i]*y[i]
             P1[2] += (x[i]**2)*y[i]
 
-        K1 = np.linalg.solve(M1, P1)
-
+        K1 = projekt.gauss(M1,P1)
         return K1
 
     def f1(self, a0, a1, a2, x):
@@ -226,7 +227,8 @@ class Projekt:
             P1[2] += (x[i]**2)*y[i]
             P1[3] += (x[i]**3)*y[i]
 
-        K1 = np.linalg.solve(M1, P1)
+        K1 = projekt.gauss(M1,P1)
+        print(K1)
         return K1
 
     def f2(self, a0, a1, a2, a3, x):
@@ -261,6 +263,7 @@ class Projekt:
         plt.title("Aproksymacja Liniowa")
         plt.xlabel("oś X")
         plt.ylabel("oś Y")
+        plt.show()
 
     def pole(sefl,ma):
         tri = Delaunay(ma[:, :2])
@@ -325,7 +328,6 @@ class Projekt:
         K1=projekt.aproksymacja3(x1[2],y1[2])
         a=x1[2][0]
         b=x1[2][2]
-        print(projekt.f1(K1[0],K1[1],K1[2],X))
         cd = sp.integrate(projekt.f1(K1[0],K1[1],K1[2],X),(X,a,b))
         sa=projekt.calkSa(K1,x1[2])
         print ("Całka Dokładna: ",cd," Całka z Aproksymacji średnio-kwadratowej: ",sa)
@@ -354,7 +356,20 @@ class Projekt:
             else:
                 zx[i]=(pz[i+1]-pz[i-1])/(px[i+1]-px[i-1])
         return zx
-    
+    def monotonicznosc(self,z):
+        n = len(x)
+
+        rosnie = all((z[i]) <= (z[i+1]) for i in range(n-1))
+        maleje = all((z[i]) >= (z[i+1]) for i in range(n-1))
+
+        if rosnie:
+            print("Funkcja jest rosnąca dla każdego punktu.")
+        elif maleje:
+            print("Funkcja jest malejąca dla każdego punktu.")
+        else:
+            print("Funkcja nie jest monotoniczna dla każdego punktu.")
+
+
     def poch1(self,x,z):
         iks=np.linspace(0,2,20)
         zx=projekt.poch(z,x)
@@ -393,26 +408,40 @@ class Projekt:
         W2=projekt.f0(K1[0], K1[1],iks)
         print(W1[0:44],"\n",W2)
         print(W1[0:44]-W2)
-        
-        
-
+    
+    def gauss(self,A,b):
+        n=A.shape[0]
+        C=np.zeros((n,n+1))
+        C[:,0:n]=A
+        C[:,n]=b
+        x=np.zeros(n)
+        for s in range(0, n-1):
+            for i in range(s+1, n):
+                # L = A[i,s] / A[s,s]
+                for j in range(s+1, n+1):
+                    C[i,j] = C[i,j] - (C[i,s] / C[s,s]) * C[s,j]
+        x[n-1] = C[n-1,n]/C[n-1,n-1]
+        for i in range(n-2,-1,-1):
+            suma = 0.0
+            for s in range(i+1, n):
+                suma = suma + C[i,s] * x[s]
+            x[i] = (C[i,n] - suma) / C[i,i]
+        return x
 
 projekt = Projekt()
-projekt.wyznacz(z, n, m, ma)
-# projekt.wykres2D(x,y,z)
-# projekt.wykres3D(x,y,z)
-# projekt.srednia(y,z)
-# projekt.mediana(y,z)
-# projekt.odchylenie(y,z)
-# projekt.funN(x[2],z[2])
-# projekt.funl(x[2], z[2])
-# projekt.funAl(x[2],z[2])
-# projekt.funA(x[2], z[2])
-# projekt.iniciuj(x[2],z[2])
-# projekt.iniciuj1(x[2],z[2])
-
-# projekt.pole(ma)
-# projekt.calkiIiA(x,z)
-
-projekt.poch1(x[2],z[2])
-# print(projekt.is_monotonic_derivative(x[2],z[2]))
+projekt.wyznacz(z, n, m, ma)#Wyznacza Z
+projekt.wykres2D(x,y,z)     #Wykres 2D
+projekt.wykres3D(x,y,z)     #Wykres 3D
+projekt.srednia(y,z)        #Średnia Arytmetyczna
+projekt.mediana(y,z)        #Mediana
+projekt.odchylenie(y,z)     #Odchylenie Standardowe
+projekt.funN(x[2],z[2])     #Funkcja Interpolacja Newtona
+projekt.funl(x[2], z[2])    #Funkcja Interpolacja Lagrangea
+projekt.funAl(x[2],z[2])    #Funkcja Aproksymacja Liniowa
+projekt.funA(x[2], z[2])    #Funkcja Aproksymacja Średnio-Kwadratowa
+# projekt.iniciuj(x[2],z[2]) #Funckcja odpowiedzialna za pokazywanie różnicy między funkcjami Interpolacyjnymi
+# projekt.iniciuj1(x[2],z[2]) #Funkcja odpowiedzialna za pokazywanie różnicy między funkcjami Aproksymacyjnymi
+projekt.pole(ma) #Liczy pole
+projekt.calkiIiA(x,z)       #Liczy całki
+projekt.poch1(x[2],z[2])    #liczy pochodną
+projekt.monotonicznosc(projekt.poch(x[2],z[2])) #Sprawdza monotoniczność
