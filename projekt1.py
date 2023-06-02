@@ -155,10 +155,9 @@ class Projekt:
         plt.ylabel("oś Y")
         plt.show()
 
-    def aproksymacja2(self,x,y):
+    def aproksymacja2(self,x,y,n):
         M=np.zeros((2,2))
         P=np.zeros (2)
-        n=2
         M[0][0]=n
         for i in range (n):
             M[0][1]=M[1][0]+x[i]
@@ -172,10 +171,9 @@ class Projekt:
     def f0(self,a0,a1,x):
         return a0+a1*x
 
-    def aproksymacja3(self, x, y):
+    def aproksymacja3(self, x, y,n):
         M1 = np.zeros((3, 3))
         P1 = np.zeros(3)
-        n = 3
         M1[0, 0] = n
         for i in range(n):
             M1[0, 1] = M1[0, 1]+x[i]
@@ -234,30 +232,21 @@ class Projekt:
     def f2(self, a0, a1, a2, a3, x):
         return a0+a1*x+a2*x**2+a3*x**3
 
-    def funA(self, X, Y):
-        X=np.round(X,2)
-        x1 = [X[i:i+3] for i in range(0,len(X)-1,2)]
-        y1 = [Y[i:i+3] for i in range(0,len(Y)-1,2)]
-        for i in range(len(x1)):
-            m=len(x1[i])-1
-            K1 = projekt.aproksymacja3(x1[i], y1[i])
-            iks = np.linspace(x1[i][0], x1[i][m], 101)
-            plt.plot(iks, projekt.f1(K1[0], K1[1], K1[2], iks),label=(f"{x1[i][0]}-{x1[i][m]}"))
+    def funA(self, X, Y,n):
+        K1 = projekt.aproksymacja3(X, Y,n)
+        iks = np.linspace(X[0], X[20], 101)
+        plt.plot(iks, projekt.f1(K1[0], K1[1], K1[2], iks),label=(f"{X[0]}-{X[20]}"))
         plt.plot(X, Y, 'bo')
         plt.legend()
         plt.title("Aproksymacja Średnio-kwadratowa")
         plt.xlabel("oś X")
         plt.ylabel("oś Y")
         plt.show()
-    def funAl(self, X, Y):
-        X=np.round(X,2)
-        x1 = [X[i:i+2] for i in range(0,len(X)-1,1)]
-        y1 = [Y[i:i+2] for i in range(0,len(Y)-1,1)]
-        for i in range(len(x1)):
-            m=len(x1[i])-1
-            K1 = projekt.aproksymacja2(x1[i], y1[i])
-            iks = np.linspace(x1[i][0], x1[i][m], 101)
-            plt.plot(iks, projekt.f0(K1[0], K1[1],iks),label=(f"{x1[i][0]}-{x1[i][m]}"))
+    def funAl(self, X, Y,n):
+        K1 = projekt.aproksymacja2(X, Y,n)
+        iks = np.linspace(X[0],X[20],101)
+        print(projekt.f0(K1[0], K1[1],iks))
+        plt.plot(iks, projekt.f0(K1[0], K1[1],iks),label=(f"{X[0]}-{X[20]}"))
         plt.plot(X, Y, 'bo')
         plt.legend()
         plt.title("Aproksymacja Liniowa")
@@ -319,13 +308,13 @@ class Projekt:
             cp += h*((y[i]+y[i+1]+4*ys)/6)
         return cp
     
-    def calkiIiA(self,x,z):
+    def calkiIiA(self,x,z,n):
         x1 = [x[2][i:i+3] for i in range(0,len(x[0])-1,2)]
         y1 = [z[2][i:i+3] for i in range(0,len(z[0])-1,2)]
 
         X=sp.symbols('x')
 
-        K1=projekt.aproksymacja3(x1[2],y1[2])
+        K1=projekt.aproksymacja3(x1[2],y1[2],3)
         a=x1[2][0]
         b=x1[2][2]
         cd = sp.integrate(projekt.f1(K1[0],K1[1],K1[2],X),(X,a,b))
@@ -356,20 +345,6 @@ class Projekt:
             else:
                 zx[i]=(pz[i+1]-pz[i-1])/(px[i+1]-px[i-1])
         return zx
-    def monotonicznosc(self,z):
-        n = len(x)
-
-        rosnie = all((z[i]) <= (z[i+1]) for i in range(n-1))
-        maleje = all((z[i]) >= (z[i+1]) for i in range(n-1))
-
-        if rosnie:
-            print("Funkcja jest rosnąca dla każdego punktu.")
-        elif maleje:
-            print("Funkcja jest malejąca dla każdego punktu.")
-        else:
-            print("Funkcja nie jest monotoniczna dla każdego punktu.")
-
-
     def poch1(self,x,z):
         iks=np.linspace(0,2,20)
         zx=projekt.poch(z,x)
@@ -378,6 +353,7 @@ class Projekt:
         plt.legend()
         plt.xlabel("oś x")
         plt.ylabel("oś y")
+        plt.axhline(y=0,color='r')
         plt.show()
         return zx
 
@@ -391,23 +367,15 @@ class Projekt:
             y_new=projekt.newton(projekt.roznica(x1[i],y1[i])[0,:],x1[i],x_new)
             print(projekt.lan(x1[i],y1[i],x_new,m+1)-y_new)
 
-    def iniciuj1(self,X, Y):
-        X=np.round(X,2)
-        x1 = [X[i:i+3] for i in range(0,len(X)-1,2)]
-        y1 = [Y[i:i+3] for i in range(0,len(Y)-1,2)]
-        m=len(x1[1])-1
-        K1 = projekt.aproksymacja3(x1[0], y1[0])
-        iks = np.linspace(x1[0][0], x1[0][m], 66)
+    def iniciuj1(self,X, Y,n):
+        K1 = projekt.aproksymacja3(X, Y,n)
+        iks = np.linspace(X[0],X[20], 20)
         W1=projekt.f1(K1[0], K1[1], K1[2], iks)
-        X=np.round(X,2)
-        x1 = [X[i:i+2] for i in range(0,len(X)-1,1)]
-        y1 = [Y[i:i+2] for i in range(0,len(Y)-1,1)]
-        m=len(x1[1])-1
-        K1 = projekt.aproksymacja2(x1[0], y1[0])
-        iks = np.linspace(x1[0][0], x1[0][m], 44)
+        K1 = projekt.aproksymacja2(X,Y,n)
+        iks = np.linspace(X[0],X[20], 20)
         W2=projekt.f0(K1[0], K1[1],iks)
-        print(W1[0:44],"\n",W2)
-        print(W1[0:44]-W2)
+        print(W1,"\n",W2)
+        print(W1-W2)
     
     def gauss(self,A,b):
         n=A.shape[0]
@@ -437,11 +405,10 @@ projekt.mediana(y,z)        #Mediana
 projekt.odchylenie(y,z)     #Odchylenie Standardowe
 projekt.funN(x[2],z[2])     #Funkcja Interpolacja Newtona
 projekt.funl(x[2], z[2])    #Funkcja Interpolacja Lagrangea
-projekt.funAl(x[2],z[2])    #Funkcja Aproksymacja Liniowa
-projekt.funA(x[2], z[2])    #Funkcja Aproksymacja Średnio-Kwadratowa
-# projekt.iniciuj(x[2],z[2]) #Funckcja odpowiedzialna za pokazywanie różnicy między funkcjami Interpolacyjnymi
-# projekt.iniciuj1(x[2],z[2]) #Funkcja odpowiedzialna za pokazywanie różnicy między funkcjami Aproksymacyjnymi
+projekt.funAl(x[2],z[2],n)    #Funkcja Aproksymacja Liniowa
+projekt.funA(x[2], z[2],n)    #Funkcja Aproksymacja Średnio-Kwadratowa
+projekt.iniciuj(x[2],z[2]) #Funckcja odpowiedzialna za pokazywanie różnicy między funkcjami Interpolacyjnymi
+projekt.iniciuj1(x[2],z[2],n) #Funkcja odpowiedzialna za pokazywanie różnicy między funkcjami Aproksymacyjnymi
 projekt.pole(ma) #Liczy pole
-projekt.calkiIiA(x,z)       #Liczy całki
+projekt.calkiIiA(x,z,n)       #Liczy całki
 projekt.poch1(x[2],z[2])    #liczy pochodną
-projekt.monotonicznosc(projekt.poch(x[2],z[2])) #Sprawdza monotoniczność
