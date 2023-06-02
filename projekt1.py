@@ -235,7 +235,7 @@ class Projekt:
     def funA(self, X, Y,n):
         K1 = projekt.aproksymacja3(X, Y,n)
         iks = np.linspace(X[0], X[20], 101)
-        plt.plot(iks, projekt.f1(K1[0], K1[1], K1[2], iks),label=(f"{X[0]}-{X[20]}"))
+        plt.plot(iks, projekt.f1(K1[0], K1[1], K1[2], iks),color="red",label=(f"{X[0]}-{X[20]}"))
         plt.plot(X, Y, 'bo')
         plt.legend()
         plt.title("Aproksymacja Średnio-kwadratowa")
@@ -245,8 +245,7 @@ class Projekt:
     def funAl(self, X, Y,n):
         K1 = projekt.aproksymacja2(X, Y,n)
         iks = np.linspace(X[0],X[20],101)
-        print(projekt.f0(K1[0], K1[1],iks))
-        plt.plot(iks, projekt.f0(K1[0], K1[1],iks),label=(f"{X[0]}-{X[20]}"))
+        plt.plot(iks, projekt.f0(K1[0], K1[1],iks),color="red",label=(f"{X[0]}-{X[20]}"))
         plt.plot(X, Y, 'bo')
         plt.legend()
         plt.title("Aproksymacja Liniowa")
@@ -398,17 +397,17 @@ class Projekt:
 
 projekt = Projekt()
 projekt.wyznacz(z, n, m, ma)#Wyznacza Z
-projekt.wykres2D(x,y,z)     #Wykres 2D
-projekt.wykres3D(x,y,z)     #Wykres 3D
-projekt.srednia(y,z)        #Średnia Arytmetyczna
-projekt.mediana(y,z)        #Mediana
-projekt.odchylenie(y,z)     #Odchylenie Standardowe
-projekt.funN(x[2],z[2])     #Funkcja Interpolacja Newtona
-projekt.funl(x[2], z[2])    #Funkcja Interpolacja Lagrangea
-projekt.funAl(x[2],z[2],n)    #Funkcja Aproksymacja Liniowa
-projekt.funA(x[2], z[2],n)    #Funkcja Aproksymacja Średnio-Kwadratowa
-projekt.iniciuj(x[2],z[2]) #Funckcja odpowiedzialna za pokazywanie różnicy między funkcjami Interpolacyjnymi
-projekt.iniciuj1(x[2],z[2],n) #Funkcja odpowiedzialna za pokazywanie różnicy między funkcjami Aproksymacyjnymi
-projekt.pole(ma) #Liczy pole
-projekt.calkiIiA(x,z,n)       #Liczy całki
+# projekt.wykres2D(x,y,z)     #Wykres 2D
+# projekt.wykres3D(x,y,z)     #Wykres 3D
+# projekt.srednia(y,z)        #Średnia Arytmetyczna
+# projekt.mediana(y,z)        #Mediana
+# projekt.odchylenie(y,z)     #Odchylenie Standardowe
+# projekt.funN(x[2],z[2])     #Funkcja Interpolacja Newtona
+# projekt.funl(x[2], z[2])    #Funkcja Interpolacja Lagrangea
+# projekt.funAl(x[2],z[2],n)    #Funkcja Aproksymacja Liniowa
+# projekt.funA(x[2], z[2],n)    #Funkcja Aproksymacja Średnio-Kwadratowa
+# projekt.iniciuj(x[2],z[2]) #Funckcja odpowiedzialna za pokazywanie różnicy między funkcjami Interpolacyjnymi
+# projekt.iniciuj1(x[2],z[2],n) #Funkcja odpowiedzialna za pokazywanie różnicy między funkcjami Aproksymacyjnymi
+# projekt.pole(ma) #Liczy pole
+# projekt.calkiIiA(x,z,n)       #Liczy całki
 projekt.poch1(x[2],z[2])    #liczy pochodną
